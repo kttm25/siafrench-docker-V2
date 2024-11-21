@@ -1,3 +1,2 @@
 data/*
-!data/hostd.yml
-!data/walletd.yml
+!data/config.yml
