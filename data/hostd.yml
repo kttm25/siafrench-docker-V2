@@ -1,0 +1,3 @@
+directory: /etc/hostd
+consensus:
+  netWork: mainnet
