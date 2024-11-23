@@ -1,2 +1,4 @@
-data/*
-!data/config.yml
+walletd/*
+!walletd/walletd.yml
+renterd/*
+hostd/*

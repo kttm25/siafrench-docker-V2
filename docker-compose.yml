@@ -11,30 +11,37 @@ services:
       - 9981:9981
       - 8080:8080
     volumes:
-      - ./data:/data
+      - ./renterd:/data
     restart: unless-stopped
     stop_grace_period: 5m
   walletd:
     image: ghcr.io/siafoundation/walletd:latest
     environment:
       - WALLETD_API_PASSWORD=${API_PASSWORD}
-      - WALLETD_CONFIG_FILE=/data/config.yml
+      #For testnet you need to change the content of walletd.yml in walletd folder following this documentation https://github.com/SiaFoundation/walletd
+      - WALLETD_CONFIG_FILE=../data/walletd.yml
     ports:
       - 127.0.0.1:9780:9980/tcp
       - 9781:9981/tcp
     volumes:
-      - ./data:/data
+      - ./walletd:/data
     restart: unless-stopped
   hostd:
-    image: ghcr.io/siafoundation/hostd:latest
+    # Replace latest by latest-testnet if you want to change network
+    image: ghcr.io/siafoundation/hostd:latest-testnet
+    #image: ghcr.io/siafoundation/hostd:latest
     environment:
+      - HOSTD_ZEN_SEED=${SEED}
+      - HOSTD_ZEN_API_PASSWORD=${API_PASSWORD}
       - HOSTD_SEED=${SEED}
       - HOSTD_API_PASSWORD=${API_PASSWORD}
-      - HOSTD_CONFIG_FILE=/data/config.yml
-    ports:
-      - 127.0.0.1:9880:9980/tcp
-      - 9881-9883:9981-9983/tcp
+    ports: 
+      # If the network is testnet set the parameter to docker port 9880
+      #- 127.0.0.1:9880:9980/tcp
+      #- 9881-9883:9981-9983/tcp
+      - 127.0.0.1:9880:9880/tcp
+      - 9881-9883:9881-9883/tcp
     volumes:
-      - ./data:/data
-      - ./storage:/storage
+      - ./hostd/data:/data
+      - ./hostd/storage:/storage
     restart: unless-stopped
